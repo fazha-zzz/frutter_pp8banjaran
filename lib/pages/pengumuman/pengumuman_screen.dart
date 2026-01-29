@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pp8banjaran/pages/custom_header.dart';
 import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:pp8banjaran/pages/pengumuman/Pengumuman_detail_screen.dart';
@@ -13,6 +14,7 @@ class PengumumanScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CustomHeader(),
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(

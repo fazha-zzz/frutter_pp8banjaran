@@ -38,5 +38,18 @@ class AuthService {
   Future<void> logout() async {
     await box.remove('token');
   }
+
+  static Future<String?> getToken() async {
+    final box = GetStorage();
+    final token = box.read('token');
+
+    if (token == null || token.toString().isEmpty) {
+      return null;
+    }
+
+    return token.toString();
+  }
+
+    
 }
 

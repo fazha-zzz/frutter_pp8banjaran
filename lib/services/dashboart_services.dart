@@ -1,46 +1,24 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'auth_services.dart';
+import '../model/dasboard.dart';
 
-class PembayaranService {
-  static const String baseUrl = "http://127.0.0.1:8000/api";
-  // 👉 ganti dengan domain hosting Laravel Tuan
+class DashboardService {
+  static const baseUrl = 'http://127.0.0.1:8000/api';
 
-  /// Create pembayaran (Dibayar)
-  Future<bool> createPembayaran({
-    required int idTagihan,
-    required int rekeningId,
-    File? buktiPembayaran,
-  }) async {
-    try {
-      var request = http.MultipartRequest(
-        "POST",
-        Uri.parse("$baseUrl/pembayaran"),
-      );
+  static Future<DashboardModel> fetchDashboard() async {
+    final token = await AuthService.getToken();
 
-      request.fields['id_tagihan'] = idTagihan.toString();
-      request.fields['rekening_id'] = rekeningId.toString();
+    final response = await http.get(
+      Uri.parse('$baseUrl/dashboard'),
+      headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+    );
 
-      if (buktiPembayaran != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'bukti_pembayaran',
-            buktiPembayaran.path,
-          ),
-        );
-      }
-
-      var response = await request.send();
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return true;
-      } else {
-        print("Gagal create pembayaran, code: ${response.statusCode}");
-        return false;
-      }
-    } catch (e) {
-      print("Error createPembayaran: $e");
-      return false;
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      return DashboardModel.fromJson(body['data']);
+    } else {
+      throw Exception('Gagal memuat dashboard');
     }
   }
 }

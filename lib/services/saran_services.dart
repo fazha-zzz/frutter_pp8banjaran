@@ -1,40 +1,52 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:pp8banjaran/model/saran.dart';
-
+import '../model/saran.dart';
+import 'auth_services.dart';
 
 class SaranService {
-  final String baseUrl =
-      "http://127.0.0.1:8000/api"; // sesuaikan dengan API Tuan
+  static const baseUrl = 'http://127.0.0.1:8000/api/saran';
 
-  /// Ambil semua saran
-  Future<SaranModel?> getAllSaran() async {
-    try {
-      final response = await http.get(Uri.parse("$baseUrl/saran"));
-      if (response.statusCode == 200) {
-        return SaranModel.fromJson(jsonDecode(response.body));
-      }
-    } catch (e) {
-      print("Error getAllSaran: $e");
+  static Future<List<SaranModel>> fetchSaran() async {
+    final token = await AuthService.getToken();
+
+    if (token == null) {
+      throw Exception('Token tidak ditemukan');
     }
-    return null;
+
+    final response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+    );
+
+    print('STATUS: ${response.statusCode}');
+    print('BODY: ${response.body}');
+
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      return (body['data'] as List).map((e) => SaranModel.fromJson(e)).toList();
+    } else {
+      throw Exception('Gagal memuat saran');
+    }
   }
 
-  /// Tambah saran baru
-  Future<bool> createSaran(int idUser, String isi) async {
-    try {
-      final response = await http.post(
-        Uri.parse("$baseUrl/saran"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"id_user": idUser, "isi": isi}),
-      );
+  static Future<void> kirimSaran(String isi) async {
+    final token = await AuthService.getToken();
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return true;
-      }
-    } catch (e) {
-      print("Error createSaran: $e");
+    if (token == null) {
+      throw Exception('Token tidak ditemukan');
     }
-    return false;
+
+    final response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+      body: {'isi': isi},
+    );
+
+    print('STATUS: ${response.statusCode}');
+    print('BODY: ${response.body}');
+
+    if (response.statusCode != 201) {
+      throw Exception('Gagal mengirim saran');
+    }
   }
 }

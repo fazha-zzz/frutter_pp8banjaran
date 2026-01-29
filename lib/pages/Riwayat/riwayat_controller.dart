@@ -3,19 +3,33 @@ import '../../model/riwayat.dart';
 import '../../services/riwayat_services.dart';
 
 class RiwayatController extends GetxController {
-  var isLoading = true.obs;
-  var riwayatList = <RiwayatModel>[].obs;
+  var tunggakan = <RiwayatModel>[].obs;
+  var histori = <RiwayatModel>[].obs;
+  var isLoading = false.obs;
+
+  get riwayatList => null;
 
   @override
   void onInit() {
-    fetchRiwayat();
+    fetchPembayaran();
     super.onInit();
   }
 
-  void fetchRiwayat() async {
+  void fetchPembayaran() async {
     try {
       isLoading(true);
-      riwayatList.value = await RiwayatServices.fetchRiwayat();
+
+      final data = await RiwayatServices.fetchPembayaran();
+
+      tunggakan.value = (data['tunggakan'] as List)
+          .map((e) => RiwayatModel.fromJson(e))
+          .toList();
+
+      histori.value = (data['histori'] as List)
+          .map((e) => RiwayatModel.fromJson(e))
+          .toList();
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
     } finally {
       isLoading(false);
     }

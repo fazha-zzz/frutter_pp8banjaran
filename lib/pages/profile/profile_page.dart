@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'profile_controller.dart';
+import 'package:pp8banjaran/pages/custom_header.dart';
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({super.key});
@@ -10,6 +11,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CustomHeader(),
       backgroundColor: Colors.grey[100],
       body: Obx(() {
         if (controller.isLoading.value) {

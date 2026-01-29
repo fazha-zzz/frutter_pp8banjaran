@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'kegiatan_detail_controller.dart';
+import 'package:pp8banjaran/pages/custom_header.dart';
 
 class KegiatanDetailScreen extends StatelessWidget {
   final int id;
@@ -15,12 +16,8 @@ Widget build(BuildContext context) {
   controller.fetchDetail(id);
 
   return Scaffold(
+    appBar: const CustomHeader(),
     backgroundColor: const Color(0xffeef6fb),
-    appBar: AppBar(
-      title: const Text('Detail Kegiatan'),
-      centerTitle: true,
-      elevation: 0,
-    ),
     body: Obx(() {
       if (controller.isLoading.value) {
         return const Center(child: CircularProgressIndicator());

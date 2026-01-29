@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../pages/Riwayat/riwayat_controller.dart';
+import 'package:pp8banjaran/pages/custom_header.dart';
 
 class RiwayatScreen extends StatelessWidget {
   RiwayatScreen({super.key});
@@ -23,8 +24,8 @@ class RiwayatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CustomHeader(),
       backgroundColor: const Color(0xfff5f7fb),
-      appBar: AppBar(title: const Text('Payment History'), centerTitle: true),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());

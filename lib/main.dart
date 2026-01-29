@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pp8banjaran/pages/Riwayat/riwayat_screen.dart';
 import 'package:pp8banjaran/pages/auth/login_screen.dart';
 import 'package:pp8banjaran/pages/menu_screen.dart';
+import 'package:pp8banjaran/pages/saran/saran_screen.dart';
 import 'package:pp8banjaran/services/auth_services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:get/get.dart';
@@ -15,12 +17,19 @@ void main() async{
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Belajar Flutter',
       home: AuthCheck(),
+       getPages: [
+        GetPage(name: '/login', page: () => LoginScreen()),
+        GetPage(name: '/menu', page: () => MenuScreen()),
+        GetPage(name: '/riwayat', page: () => RiwayatScreen()),
+        GetPage(name: '/saran', page: () => SaranScreen()),
+      ],
     );
   }
 }

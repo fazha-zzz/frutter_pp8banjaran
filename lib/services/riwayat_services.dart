@@ -4,23 +4,20 @@ import 'package:get_storage/get_storage.dart';
 import '../model/riwayat.dart';
 
 class RiwayatServices {
-  static const baseUrl = 'http://127.0.0.1:8000/api';
+  static const baseUrl = 'https://abstruse-terica-discordant.ngrok-free.dev/api';
 
-  static Future<List<RiwayatModel>> fetchRiwayat() async {
+  static Future<Map<String, dynamic>> fetchPembayaran() async {
     final token = GetStorage().read('token');
 
     final response = await http.get(
-      Uri.parse('$baseUrl/pembayaran/riwayat'),
-      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+      Uri.parse('$baseUrl/user/pembayaran'),
+      headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
     );
 
     if (response.statusCode == 200) {
-      final body = json.decode(response.body);
-      final List data = body['data'];
-
-      return data.map((e) => RiwayatModel.fromJson(e)).toList();
+      return json.decode(response.body);
     } else {
-      throw Exception('Gagal memuat riwayat');
+      throw Exception('Gagal memuat pembayaran');
     }
   }
 }

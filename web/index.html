@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <title>Flutter App</title>
+
+  <!-- MIDTRANS SNAP -->
+  <script
+    src="https://app.sandbox.midtrans.com/snap/snap.js"
+    data-client-key="MIDTRANS_CLIENT_KEY_ANDA">
+  </script>
+
+  <!-- JS BRIDGE -->
+  <script src="midtrans.js"></script>
+
+  
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
@@ -34,5 +47,25 @@
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
+  <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-XXXXXXX"></script>
+  
+  <script>
+    function payMidtrans(token) {
+      snap.pay(token, {
+        onSuccess: function (result) {
+          console.log("SUCCESS", result);
+        },
+        onPending: function (result) {
+          console.log("PENDING", result);
+        },
+        onError: function (result) {
+          console.log("ERROR", result);
+        },
+        onClose: function () {
+          console.log("CLOSED");
+        }
+      });
+    }
+  </script>
 </body>
 </html>
