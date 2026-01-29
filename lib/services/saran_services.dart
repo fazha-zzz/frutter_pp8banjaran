@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:pp8banjaran/app/data/model/saran.dart';
+import 'package:pp8banjaran/model/saran.dart';
 
 
 class SaranService {
   final String baseUrl =
-      "http://ipl-pp8banjaran.web.id/api"; // sesuaikan dengan API Tuan
+      "http://127.0.0.1:8000/api"; // sesuaikan dengan API Tuan
 
   /// Ambil semua saran
   Future<SaranModel?> getAllSaran() async {
