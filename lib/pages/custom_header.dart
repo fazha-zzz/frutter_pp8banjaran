@@ -74,7 +74,7 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                 }
 
                 if (value == 'saran') {
-                  Get.to(() => SaranScreen());
+                  Get.to(() => SaranPage());
                   // atau: Get.toNamed('/saran');
                 }
 
