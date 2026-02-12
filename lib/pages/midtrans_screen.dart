@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:get/get.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:js' as js;
 
 class MidtransScreen extends StatelessWidget {
   const MidtransScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final snapToken = Get.arguments;
+    final String snapToken = Get.arguments as String;
+
+    // Auto open saat screen dibuka
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (kIsWeb) {
+        js.context.callMethod('payMidtrans', [snapToken]);
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(title: const Text('Pembayaran')),
-      body: WebViewWidget(
-        controller: WebViewController()
-          ..setJavaScriptMode(JavaScriptMode.unrestricted)
-          ..loadRequest(
-            Uri.parse(
-              'https://app.sandbox.midtrans.com/snap/v2/vtweb/$snapToken',
-            ),
-          ),
+      body: const Center(
+        child: Text(
+          'Popup pembayaran Midtrans sedang dibuka…',
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }

@@ -72,92 +72,220 @@ class DashboardScreen extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   /// ===== TAGIHAN CARD =====
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF4F7CFF), Color(0xFF3BAE8C)],
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
+                  FutureBuilder(
+                    future: tagihan != null
+                        ? MidtransService.getSnapToken(tagihan['id'])
+                        : Future.value(null),
+                    builder: (context, snapshot) {
+                      return Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF4F7CFF), Color(0xFF3BAE8C)],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Tagihan',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 16,
+                            /// Detail Tagihan
+                            if (snapshot.hasData)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(15),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.15),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'Tagihan',
+                                              style: TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Rp ${snapshot.data!.total ?? 0}',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'Denda',
+                                              style: TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Rp ${snapshot.data!.denda ?? 0}',
+                                              style: const TextStyle(
+                                                color: Color(0xFFFFB6B6),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 12),
+                                        Container(
+                                          height: 1,
+                                          color: Colors.white.withOpacity(0.3),
+                                        ),
+                                        const SizedBox(height: 12),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'Total Bayar',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Rp ${snapshot.data!.totalFinal ?? 0}',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 15),
+                                ],
+                              )
+                            else if (snapshot.connectionState ==
+                                ConnectionState.waiting)
+                              Container(
+                                padding: const EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const SizedBox(
+                                  height: 80,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            else
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Tagihan',
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    'Rp ${tagihan != null ? tagihan['total'] : 0}',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              'Rp ${tagihan != null ? tagihan['total'] : 0}',
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+
+                            /// Tombol Bayar
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: const Color(0xFF4F7CFF),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                ),
+                                onPressed:
+                                    tagihan == null ||
+                                        snapshot.connectionState ==
+                                            ConnectionState.waiting
+                                    ? null
+                                    : () async {
+                                        try {
+                                          final snapToken =
+                                              await MidtransService.getSnapToken(
+                                                tagihan['id'],
+                                              );
+
+                                          if (kIsWeb) {
+                                            js.context.callMethod(
+                                              'payMidtrans',
+                                              [snapToken.snapToken],
+                                            );
+                                          } else {
+                                            Get.snackbar(
+                                              'Info',
+                                              'Pembayaran hanya tersedia di Web',
+                                            );
+                                          }
+                                        } catch (e) {
+                                          Get.snackbar(
+                                            'Error',
+                                            e.toString(),
+                                            backgroundColor: Colors.redAccent,
+                                            colorText: Colors.white,
+                                          );
+                                        }
+                                      },
+                                child: const Text(
+                                  'Bayar Sekarang',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
-                        const Spacer(),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: const Color(0xFF4F7CFF),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 10,
-                            ),
-                          ),
-                          onPressed: tagihan == null
-                              ? null
-                              : () async {
-                                  try {
-                                    final snapToken =
-                                        await MidtransService.getSnapToken(
-                                          tagihan['id'],
-                                        );
-
-                                    if (kIsWeb) {
-                                      js.context.callMethod('payMidtrans', [
-                                        snapToken,
-                                      ]);
-                                    } else {
-                                      Get.snackbar(
-                                        'Info',
-                                        'Pembayaran hanya tersedia di Web',
-                                      );
-                                    }
-                                  } catch (e) {
-                                    Get.snackbar(
-                                      'Error',
-                                      e.toString(),
-                                      backgroundColor: Colors.redAccent,
-                                      colorText: Colors.white,
-                                    );
-                                  }
-                                },
-                          child: const Text(
-                            'Bayar',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 30),
