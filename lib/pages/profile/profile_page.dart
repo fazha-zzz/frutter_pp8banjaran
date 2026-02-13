@@ -26,6 +26,8 @@ class ProfilePage extends StatelessWidget {
         final data = profile.data!;
 
         return SingleChildScrollView(
+          // Tambahkan padding di sini untuk seluruh konten
+          padding: const EdgeInsets.only(bottom: 100),
           child: Column(
             children: [
               /// 🔹 HEADER
@@ -104,6 +106,7 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
 
+              // Di dalam ProfilePage, pada bagian Logout:
               const SizedBox(height: 32),
 
               /// 🔹 LOGOUT
@@ -112,7 +115,7 @@ class ProfilePage extends StatelessWidget {
                 child: ElevatedButton.icon(
                   onPressed: controller.logout,
                   icon: const Icon(Icons.logout),
-                  label: const Text('Logout'),
+                  label: const Text('Keluar dari Akun'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
@@ -191,6 +194,26 @@ class ProfilePage extends StatelessWidget {
             Text(label),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        title: const Text('Konfirmasi Logout'),
+        content: const Text('Apakah Anda yakin ingin keluar dari aplikasi?'),
+        actions: [
+          TextButton(onPressed: () => Get.back(), child: const Text('Batal')),
+          TextButton(
+            onPressed: () => controller.logout(),
+            child: const Text(
+              'Ya, Logout',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
       ),
     );
   }

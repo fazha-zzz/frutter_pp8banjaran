@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await initializeDateFormatting('id_ID', null);
   await GetStorage.init();
 
@@ -22,15 +23,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Belajar Flutter',
+      title: 'PP8 Banjaran',
 
-      // ✅ HARUS '/'
       initialRoute: '/',
 
       getPages: [
         GetPage(name: '/', page: () => const AuthCheck()),
-        GetPage(name: '/login', page: () => LoginScreen()),
-        GetPage(name: '/menu', page: () => MenuScreen()),
+        GetPage(name: '/login', page: () => const LoginScreen()),
+        GetPage(name: '/menu', page: () => const MenuScreen()),
         GetPage(name: '/saran', page: () => SaranPage()),
       ],
     );
@@ -50,14 +50,11 @@ class _AuthCheckState extends State<AuthCheck> {
   @override
   void initState() {
     super.initState();
-
-    // 🔥 TUNGGU SAMPAI FRAME PERTAMA SELESAI
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkLogin();
-    });
+    _checkLogin();
   }
 
-  void _checkLogin() async {
+  Future<void> _checkLogin() async {
+    await Future.delayed(const Duration(milliseconds: 300));
     final isLoggedIn = await _authService.isLoggedIn();
 
     if (!mounted) return;
@@ -71,8 +68,6 @@ class _AuthCheckState extends State<AuthCheck> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
-    );
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
